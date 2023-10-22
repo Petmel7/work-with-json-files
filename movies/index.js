@@ -3,6 +3,7 @@ import path from "path";
 import { nanoid } from "nanoid";
 
 const moviesPath = path.resolve("movies", "movies.json")
+const updateMovie = movies => fs.writeFile(moviesPath, JSON.stringify(movies, null, 2));
 
 export const getAllMovies = async () => {
     const data = await fs.readFile(moviesPath)
@@ -21,8 +22,31 @@ export const addMovie = async ({ title, director }) => {
         id: nanoid(),
         title,
         director,
-    }
+    };
     movies.push(newMovie);
-    await fs.writeFile(moviesPath, JSON.stringify(movies));
+    await updateMovie(movies);
     return newMovie;
+}
+
+export const updateMovieById = async (id, { title, director }) => {
+    const movies = await getAllMovies();
+    const index = movies.findIndex(item => item.id === id)
+    if (index === -1) {
+        return null
+    }
+    movies[index] = { id, title, director };
+    await updateMovie(movies);
+    return movies[index];
+}
+
+export const deleteMovie = async id => {
+    const movies = await getAllMovies();
+    const index = movies.findIndex(movie => movie.id === id)
+    if (index === -1) {
+        return null
+    }
+    movies.splice(index, 1)
+    await updateMovie(movies);
+
+    return id;
 }
