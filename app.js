@@ -1,3 +1,5 @@
+
+import { program } from "commander";
 import *as movieService from "./movies/index.js";
 
 const invokeAction = async ({ action, id, title, director }) => {
@@ -20,16 +22,14 @@ const invokeAction = async ({ action, id, title, director }) => {
         default: console.log("Uncnown action")
     }
 }
-// invokeAction({ action: "list" });
-// invokeAction({ action: "getById", id: "5" });
-// invokeAction({ action: "add", title: "The Creator", director: "Gareth Edwards" });
-// invokeAction({ action: "updateById", id: "1", title: "Killers of the Flower Moon", director: "Martin Scorsese" });
-// invokeAction({ action: "deleteById", id: "3" });
 
-const actionIndex = process.argv.indexOf("--action");
-if (actionIndex !== -1) {
-    const action = process.argv[actionIndex + 1];
-    // console.log(action);
-    invokeAction({ action });
-    
-}
+program
+    .option("-a, --action <type>")
+    .option("-i, --id <type>")
+    .option("-t, --title <type>")
+    .option("-d, --director <type>")
+
+program.parse();
+
+const options = program.opts();
+invokeAction(options);
