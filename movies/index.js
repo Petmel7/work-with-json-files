@@ -11,7 +11,7 @@ export const getAllMovies = async () => {
 }
 
 export const getMovieById = async id => {
-    const movies = await getAllMovies()
+    const movies = await getAllMovies();
     const result = await movies.find(item => item.id === id);
     return result ?? null
 }
